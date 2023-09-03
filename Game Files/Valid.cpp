@@ -56,7 +56,7 @@ string Valid::isValid(string from, boardType board, int turn) // Finished
    }
    return piece;
 }
-bool Valid::isValid(string to, string from, boardType board, turn) // Finished
+bool Valid::isValid(string to, string from, boardType board, int turn) // Finished
 {
    string temp = validPos(to);
    if (temp == "-1")

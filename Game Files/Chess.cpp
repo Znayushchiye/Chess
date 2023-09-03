@@ -1,3 +1,5 @@
+#include "ChessPieces.cpp"
+#include "Valid.cpp"
 #include "Player1.cpp"
 #include "Player2.cpp"
 class Chess
@@ -82,15 +84,14 @@ int main()
     cout << "-----------------------------------------------------";
     cout << "\nWelcome to Chess!!\n";
     cout << "Player 1's name: ";
-    string human1;
-    cin >> human1;
+    string playerName1;
+    cin >> playerName1;
     cout << "Player 2's name: ";
-    string human2;
-    cin >> human2;
+    string playerName2;
+    cin >> playerName2;
     cout << endl
-         << human1 << " takes WHITE and " << human2 << " takes BLACK.\n\n";
+         << playerName1 << " takes WHITE and " << playerName2 << " takes BLACK.\n\n";
     game.display();
-    cout << "\nFor " << human1 << ",\n";
     Player1 pl1(game.getBoard());
     Player2 pl2(game.getBoard());
     int moves = 0;
@@ -98,11 +99,13 @@ int main()
     {
         if (moves != 0)
             game.display();
+        cout << "\nFor " << playerName1 << ",\n";
         game.setBoard(pl1.turn(game.getBoard()));
         moves++;
         if (pl1.hasWon() || moves == 75)
             break;
         game.display();
+        cout << "\nFor " << playerName2 << ",\n";
         game.setBoard(pl2.turn(game.getBoard()));
         moves++;
 
@@ -110,9 +113,9 @@ int main()
     if (moves > 75)
         cout << "Match Draw! GG, everyone..!";
     else if (pl1.hasWon())
-        cout << human1 << " has won! Congratulations..!!";
+        cout << playerName1 << " has won! Congratulations..!!";
     else
-        cout << human2 << " has won! Congratulations..!!";
+        cout << playerName2 << " has won! Congratulations..!!";
     cout << "\n\nFinal Board:\n";
     game.display();
     cout << "-----------------------------------------------------";
