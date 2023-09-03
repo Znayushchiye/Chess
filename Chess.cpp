@@ -1,23 +1,8 @@
-#include <iostream>
-#include <map>
-#include <vector>
 #include "Player1.cpp"
 #include "Player2.cpp"
-using namespace std;
-
 class Chess
 {
-
-    map<char, vector<string>> board = {
-        {'A', {"  ", "BR", "BK", "BB", "KB", "QB", "BB", "BK", "BR"}},
-        {'B', {"  ", "BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"}},
-        {'C', {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "}},
-        {'D', {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "}},
-        {'E', {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "}},
-        {'F', {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "}},
-        {'G', {"  ", "WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"}},
-        {'H', {"  ", "WR", "WK", "WB", "QW", "KW", "WB", "WK", "WR"}},
-    };
+    boardType board;
     map<string, int> pieces;
     map<string, int> countPieces();
 
@@ -25,11 +10,35 @@ public:
     Chess();
     void display();
     bool gameOver(Player1, Player2);
-    void setBoard(map<char, vector<string>>);
-    map<char, vector<string>> getBoard();
+    void setBoard(boardType);
+    boardType getBoard();
 };
 Chess::Chess()
 {
+    for (int i = 0; i < 73; i++)
+    {
+        vector<string> temp;
+        for (int j = 0; j < 9; j++)
+            temp.push_back("  ");
+        board.push_back(temp);
+    }
+
+    board[65][1] = board[65][8] = "BR";
+    board[65][2] = board[65][7] = "BK";
+    board[65][3] = board[65][6] = "BB";
+    for (int i = 1; i < 9; i++)
+        board[66][i] = "BP";
+    board[65][4] = "KB";
+    board[65][5] = "QB";
+
+    board[72][1] = board[72][8] = "WR";
+    board[72][2] = board[72][7] = "WK";
+    board[72][3] = board[72][6] = "WB";
+    for (int i = 1; i < 9; i++)
+        board[71][i] = "WP";
+    board[72][4] = "QW";
+    board[72][5] = "KW";
+
     pieces = countPieces();
 }
 void Chess::display()
@@ -37,13 +46,12 @@ void Chess::display()
     cout << endl;
     cout << "      1    2    3    4    5    6    7    8" << endl;
     cout << "    -----------------------------------------" << endl;
-    for (auto i : board)
+    for (int i = 65; i < 73; i++)
     {
-        cout << " " << i.first << " ";
+        cout << " " << (char)i << " ";
         for (int j = 1; j < 9; j++)
-            cout << " | " << (i.second)[j];
-        cout << " | " << endl
-             << "    -----------------------------------------" << endl;
+            cout << " | " << board[i][j];
+        cout << " | \n    -----------------------------------------\n";
     }
 }
 bool Chess::gameOver(Player1 p1, Player2 p2)
@@ -55,17 +63,16 @@ map<string, int> Chess::countPieces()
     map<string, int> piece;
     for (auto itr : board)
     {
-        vector<string> row = itr.second;
-        for (string pc : row)
-            piece[pc]++;
+        for (int i = 1; i < 9; i++)
+            piece[itr[i]]++;
     }
     return piece;
 }
-void Chess::setBoard(map<char, vector<string>> b)
+void Chess::setBoard(boardType b)
 {
     board = b;
 }
-map<char, vector<string>> Chess::getBoard()
+boardType Chess::getBoard()
 {
     return board;
 }
@@ -91,12 +98,12 @@ int main()
     {
         if (moves != 0)
             game.display();
-        game.setBoard(pl1.turn());
+        game.setBoard(pl1.turn(game.getBoard()));
         moves++;
-        if (pl1.hasWon() || moves > 75)
+        if (pl1.hasWon() || moves == 75)
             break;
         game.display();
-        game.setBoard(pl2.turn());
+        game.setBoard(pl2.turn(game.getBoard()));
         moves++;
 
     } while (!game.gameOver(pl1, pl2));
