@@ -1,46 +1,50 @@
 #include <unistd.h>
-#include "ChessPieces.cpp"
-#include "Valid.cpp"
+#include <map>
+#include <iostream>
+#include "Driver.cpp"
 #include "Player1.cpp"
 #include "Player2.cpp"
+
 class Chess
 {
-    boardType board;
-    std::map<std::string, int> pieces;
-    std::map<std::string, int> countPieces();
+    int **board;
+    std::map<int, int> pieces;
+    std::map<int, int> countPieces();
 
 public:
     Chess();
     void display();
     bool gameOver(Player1, Player2);
-    void setBoard(boardType);
-    boardType getBoard();
+    void setBoard(int **);
+    int **getBoard();
 };
 Chess::Chess()
 {
-    for (int i = 0; i < 73; i++)
+    board = new int *[8];
+    for (int i = 0; i < 8; i++)
     {
-        std::vector<std::string> temp;
-        for (int j = 0; j < 9; j++)
-            temp.push_back("  ");
-        board.push_back(temp);
+        board[i] = new int[8];
+        for (int j = 0; j < 8; j++)
+        {
+            board[i][j] = 0;
+        }
     }
 
-    board[65][1] = board[65][8] = "BR";
-    board[65][2] = board[65][7] = "BK";
-    board[65][3] = board[65][6] = "BB";
-    for (int i = 1; i < 9; i++)
-        board[66][i] = "BP";
-    board[65][4] = "KB";
-    board[65][5] = "QB";
+    for (int i = 0; i < 8; i++)
+        board[1][i] = -1;
+    board[0][0] = board[0][7] = -2;
+    board[0][1] = board[0][6] = -3;
+    board[0][2] = board[0][5] = -4;
+    board[0][3] = -5;
+    board[0][4] = -6;
 
-    board[72][1] = board[72][8] = "WR";
-    board[72][2] = board[72][7] = "WK";
-    board[72][3] = board[72][6] = "WB";
-    for (int i = 1; i < 9; i++)
-        board[71][i] = "WP";
-    board[72][4] = "QW";
-    board[72][5] = "KW";
+    for (int i = 0; i < 8; i++)
+        board[6][i] = 1;
+    board[7][0] = board[7][7] = 2;
+    board[7][1] = board[7][6] = 3;
+    board[7][2] = board[7][5] = 4;
+    board[7][4] = 5;
+    board[7][3] = 6;
 
     pieces = countPieces();
 }
@@ -49,11 +53,38 @@ void Chess::display()
     std::cout << std::endl;
     std::cout << "      1    2    3    4    5    6    7    8" << std::endl;
     std::cout << "    -----------------------------------------" << std::endl;
-    for (int i = 65; i < 73; i++)
+    for (int i = 0; i < 8; i++)
     {
-        std::cout << " " << (char)i << " ";
-        for (int j = 1; j < 9; j++)
-            std::cout << " | " << board[i][j];
+        std::cout << " " << (char)(i + 65) << " ";
+        for (int j = 0; j < 8; j++)
+        {
+            int piece = board[i][j];
+            std::cout << " | ";
+            switch (abs(piece))
+            {
+            case 0:
+                std::cout << "  ";
+                break;
+            case 1:
+                std::cout << ((piece < 0) ? "B" : "W") << "P";
+                break;
+            case 2:
+                std::cout << ((piece < 0) ? "B" : "W") << "R";
+                break;
+            case 3:
+                std::cout << ((piece < 0) ? "B" : "W") << "K";
+                break;
+            case 4:
+                std::cout << ((piece < 0) ? "B" : "W") << "B";
+                break;
+            case 5:
+                std::cout << "Q" << ((piece < 0) ? "B" : "W");
+                break;
+            case 6:
+                std::cout << "K" << ((piece < 0) ? "B" : "W");
+                break;
+            }
+        }
         std::cout << " | \n    -----------------------------------------\n";
     }
 }
@@ -61,21 +92,21 @@ bool Chess::gameOver(Player1 p1, Player2 p2)
 {
     return p1.hasWon() || p2.hasWon();
 }
-std::map<std::string, int> Chess::countPieces()
+std::map<int, int> Chess::countPieces()
 {
-    std::map<std::string, int> piece;
-    for (auto itr : board)
-    {
-        for (int i = 1; i < 9; i++)
-            piece[itr[i]]++;
-    }
+    std::map<int, int> piece;
+    for (int i = 0; i < 8; i++)
+        for (int j = 0; j < 8; j++)
+            piece[board[i][j]]++;
     return piece;
 }
-void Chess::setBoard(boardType b)
+void Chess::setBoard(int **b)
 {
-    board = b;
+    for (int i = 0; i < 8; i++)
+        for (int j = 0; j < 8; j++)
+            board[i][j] = b[i][j];
 }
-boardType Chess::getBoard()
+int **Chess::getBoard()
 {
     return board;
 }
@@ -95,6 +126,7 @@ int main()
               << playerName1 << " takes WHITE and " << playerName2 << " takes BLACK.\n";
     usleep(500000);
     game.display();
+
     Player1 pl1(game.getBoard());
     Player2 pl2(game.getBoard());
     int moves = 0;

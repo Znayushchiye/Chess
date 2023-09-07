@@ -1,11 +1,12 @@
+#include "ChessPieces.cpp"
 class Valid : public ChessPieces
 {
 protected:
    std::string validPos(std::string);
-   std::string isValid(std::string, boardType, int);
-   bool isValid(std::string, std::string, boardType, int);
-   bool canMove(std::string, std::string, boardType, int);
-   std::map<std::string, int> countpieces(boardType);
+   int isValid(std::string, int **, int);
+   bool isValid(std::string, std::string, int **, int);
+   bool canMove(std::string, std::string, int **, int);
+   std::map<int, int> countpieces(int **);
 };
 std::string Valid::validPos(std::string str)
 {
@@ -35,126 +36,62 @@ std::string Valid::validPos(std::string str)
       std::swap(str[0], str[1]);
    return str;
 }
-std::string Valid::isValid(std::string from, boardType board, int turn) // Finished
+int Valid::isValid(std::string from, int **board, int turn) // Finished
 {
    from = validPos(from);
    if (from == "-1")
-      return "-1";
-   std::string piece = board[from[0]][from[1] - 48];
-   if (piece == "  ")
-      return "-1";
+      return 0;
+   int piece = board[from[0] - 65][from[1] - 48];
+   if (piece == 0)
+      return 0;
    switch (turn)
    {
    case 1:
-      if (piece[0] == 'B' || piece == "KB" || piece == "QB")
-         return "-1";
+      if (piece < 0)
+         return 0;
       break;
    case 2:
-      if (piece[0] == 'W' || piece[1] == 'W')
-         return "-1";
+      if (piece > 0)
+         return 0;
       break;
    }
    return piece;
 }
-bool Valid::isValid(std::string to, std::string from, boardType board, int turn) // Finished
+bool Valid::isValid(std::string to, std::string from, int **board, int turn) // Finished
 {
    to = validPos(to);
    if (to == "-1")
-      return false;
+      return 0;
    if (from == to)
-      return false;
+      return 0;
    return canMove(to, from, board, turn);
 }
-bool Valid::canMove(std::string to, std::string from, boardType board, int turn)
+bool Valid::canMove(std::string to, std::string from, int **board, int turn)
 {
-   std::string piece = board[from[0]][from[1] - 48];
-   switch (piece[0])
+   int piece = board[from[0] - 65][from[1] - 48];
+   switch (abs(piece))
    {
-   case 'K':
+   case 6:
       return king(from, to, board, turn);
-   case 'Q':
+   case 5:
       return queen(from, to, board, turn);
-   }
-   switch (piece[1])
-   {
-   case 'P':
+   case 1:
       return pawn(from, to, board, turn);
-   case 'R':
+   case 2:
       return rook(from, to, board, turn);
-   case 'B':
-      return bishop(from, to, board, turn);
-   case 'K':
+   case 3:
       return knight(from, to, board, turn);
+   case 4:
+      return bishop(from, to, board, turn);
    }
    std::cout << "Error!!";
    return false;
 }
-std::map<std::string, int> Valid::countpieces(boardType board)
+std::map<int, int> Valid::countpieces(int **board)
 {
-   std::map<std::string, int> piece;
-   for (int i = 65; i < 73; i++)
-      for (int j = 1; j < 9; j++)
+   std::map<int, int> piece;
+   for (int i = 0; i < 8; i++)
+      for (int j = 0; j < 8; j++)
          piece[board[i][j]]++;
    return piece;
-}
-
-class Driver : public Valid
-{
-protected:
-   boardType driver(int, boardType);
-   boardType move(std::string, std::string, boardType);
-};
-
-boardType Driver::driver(int turn, boardType currentBoard)
-{
-   std::cout << "   From: ";
-   std::string from;
-   std::cin >> from;
-   std::string piece;
-   while ((piece = isValid(from, currentBoard, turn)) == "-1")
-   {
-      std::cout << "   Invalid input! Enter a valid cell position: ";
-      std::cin >> from;
-   }
-   std::cout << "   Chosen piece:";
-   switch (piece[0])
-   {
-   case 'K':
-      std::cout << " King";
-      goto print;
-   case 'Q':
-      std::cout << " Queen";
-      goto print;
-   }
-   switch (piece[1])
-   {
-   case 'P':
-      std::cout << " Pawn";
-      goto print;
-   case 'R':
-      std::cout << " Rook";
-      goto print;
-   case 'K':
-      std::cout << " Knight";
-      goto print;
-   case 'B':
-      std::cout << " Bishop";
-      goto print;
-   }
-print:
-   std::cout << "\n   To: ";
-   std::string to;
-   std::cin >> to;
-   while (!isValid(to, from, currentBoard, turn))
-   {
-      std::cout << "   Invalid input! Check if your piece can move to the specified location: ";
-      std::cin >> to;
-   }
-   return move(from, to, currentBoard);
-}
-boardType Driver::move(std::string from, std::string to, boardType board)
-{
-   board[to[0]][to[1] - 48] = board[from[0]][from[1] - 48];
-   board[from[0]][from[1] - 48] = "  ";
-   return board;
 }

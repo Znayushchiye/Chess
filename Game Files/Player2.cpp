@@ -1,31 +1,30 @@
 class Player2 : public Driver
 {
 protected:
-   boardType board;
+   int **board;
 
 public:
-   Player2(boardType);
-   boardType move(std::string, std::string);
-   void setBoard(boardType);
-   boardType turn(boardType);
+   Player2(int **);
+   void setBoard(int **);
+   int **turn(int **);
    bool hasWon();
 };
-Player2::Player2(boardType board)
+Player2::Player2(int **board)
 {
    setBoard(board);
 }
-void Player2::setBoard(boardType board)
+void Player2::setBoard(int **board)
 {
    this->board = board;
 }
 bool Player2::hasWon()
 {
-   std::map<std::string, int> pieces = countpieces(board);
-   if (pieces["KW"] == 0)
+   std::map<int, int> pieces = countpieces(board);
+   if (pieces[6] == 0)
       return true;
    return false;
 }
-boardType Player2::turn(boardType currentBoard)
+int **Player2::turn(int **currentBoard)
 {
    setBoard(currentBoard);
    return driver(2, currentBoard);
