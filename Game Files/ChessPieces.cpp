@@ -8,6 +8,7 @@ class ChessPieces
 {
 protected:
    bool pawn(std::string, std::string, int **, int);
+   bool pawn(std::string, std::string, int, int **);
    bool rook(std::string, std::string, int **, int);
    bool bishop(std::string, std::string, int **, int);
    bool knight(std::string, std::string, int **, int);
@@ -17,7 +18,7 @@ protected:
 
 bool ChessPieces::pawn(std::string from, std::string to, int **board, int turn)
 {
-   int piece = board[to[0] - 65][to[1] - 48];
+   int piece = board[to[0] - 'A'][to[1] - '1'];
    switch (turn)
    {
    case 1:
@@ -25,7 +26,7 @@ bool ChessPieces::pawn(std::string from, std::string to, int **board, int turn)
          return false;
       if ((to[0] == from[0] - 1) && (abs(to[1] - from[1]) == 1) && (piece >= 0))
          return false;
-      if ((to[0] == from[0] - 2) && (board[to[0] - 64][to[1] - 48] != 0))
+      if ((to[0] == from[0] - 2) && (board[to[0] - 'A'][to[1] - '1'] != 0))
          return false;
       break;
    case 2:
@@ -33,7 +34,7 @@ bool ChessPieces::pawn(std::string from, std::string to, int **board, int turn)
          return false;
       if ((to[0] == from[0] + 1) && (abs(to[1] - from[1]) == 1) && (piece <= 0))
          return false;
-      if ((to[0] == from[0] + 2) && (board[to[0] - 66][to[1] - 48] != 0))
+      if ((to[0] == from[0] + 2) && (board[to[0] - 'A'][to[1] - '1'] != 0))
          return false;
       break;
    }
@@ -41,7 +42,32 @@ bool ChessPieces::pawn(std::string from, std::string to, int **board, int turn)
       return false;
    return true;
 }
-
+bool ChessPieces::pawn(std::string from, std::string to, int turn, int **board) // CHECK LOGIC
+{
+   int piece = board[to[0] - 'A'][to[1] - '1'];
+   switch (turn)
+   {
+   case 1:
+      if (((to[0] != from[0] - 1) || (to[1] != from[1])) && ((to[0] != from[0] - 1) || (abs(to[1] - from[1]) != 1)))
+         return false;
+      if ((to[0] == from[0] - 1) && (abs(to[1] - from[1]) == 1) && (piece >= 0))
+         return false;
+      if ((to[0] == from[0] - 2) && (board[to[0] - 'A'][to[1] - '1'] != 0))
+         return false;
+      break;
+   case 2:
+      if (((to[0] != from[0] + 1) || (to[1] != from[1])) && ((to[0] != from[0] + 1) || (abs(to[1] - from[1]) != 1)))
+         return false;
+      if ((to[0] == from[0] + 1) && (abs(to[1] - from[1]) == 1) && (piece <= 0))
+         return false;
+      if ((to[0] == from[0] + 2) && (board[to[0] - 'A'][to[1] - '1'] != 0))
+         return false;
+      break;
+   }
+   if ((from[1] == to[1]) && (piece != 0))
+      return false;
+   return true;
+}
 bool ChessPieces::rook(std::string from, std::string to, int **board, int turn)
 {
    if (from[0] != to[0] && from[1] != to[1])
@@ -57,10 +83,10 @@ bool ChessPieces::rook(std::string from, std::string to, int **board, int turn)
    } */
    if (from[0] < to[0])
    {
-      for (int i = from[0] - 64; i < to[0] - 65; i++)
+      for (int i = from[0] - 'A' + 1; i < (to[0] - 'A'); i++)
       {
-         cout << "piece = \'" << board[i][to[1] - 48] << "\'" << std::endl;
-         if (board[i][to[1] - 48] != 0)
+         cout << "piece = \'" << board[i][to[1] - '1'] << "\'" << std::endl;
+         if (board[i][to[1] - '1'] != 0)
             return false;
       }
    }

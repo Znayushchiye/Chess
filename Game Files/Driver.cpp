@@ -2,11 +2,11 @@
 class Driver : public Valid
 {
 protected:
-   int **driver(int, int **);
+   int **driver(int, int **, int);
    int **move(std::string, std::string, int **);
 };
 
-int **Driver::driver(int turn, int **currentBoard)
+int **Driver::driver(int turn, int **currentBoard, int turns)
 {
    cout << "   From: ";
    std::string from;
@@ -43,7 +43,7 @@ print:
    cout << "\n   To: ";
    std::string to;
    cin >> to;
-   while (!isValid(to, from, currentBoard, turn))
+   while (!isValid(to, from, currentBoard, turn, turns))
    {
       cout << "   Invalid input! Check if your piece can move to the specified location: ";
       cin >> to;

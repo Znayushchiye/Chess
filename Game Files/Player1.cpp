@@ -2,6 +2,7 @@ class Player1 : public Driver
 {
 protected:
    int **board;
+   int turns;
 
 public:
    Player1(int **);
@@ -11,6 +12,7 @@ public:
 };
 Player1::Player1(int **board)
 {
+   turns = 0;
    setBoard(board);
 }
 void Player1::setBoard(int **board)
@@ -26,6 +28,7 @@ bool Player1::hasWon()
 }
 int **Player1::turn(int **currentBoard)
 {
+   turns++;
    setBoard(currentBoard);
-   return driver(1, currentBoard);
+   return driver(1, currentBoard, turns);
 }

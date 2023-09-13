@@ -4,8 +4,8 @@ class Valid : public ChessPieces
 protected:
    std::string validPos(std::string);
    int isValid(std::string &, int **, int);
-   bool isValid(std::string &, std::string, int **, int);
-   bool canMove(std::string, std::string, int **, int);
+   bool isValid(std::string &, std::string, int **, int, int);
+   bool canMove(std::string, std::string, int **, int, int);
    std::map<int, int> countpieces(int **);
 };
 std::string Valid::validPos(std::string str)
@@ -34,14 +34,18 @@ std::string Valid::validPos(std::string str)
       return "-1";
    // Make the the cell position of the form A6, H2 etc.
    if (isdigit(str[0]))
-      str = ("" + str[1]) + str[0];
+   {
+      char temp = str[0];
+      str[0] = str[1];
+      str[1] = temp - 1;
+   }
+   else
+      str[1] = str[1] - 1;
    return str;
 }
 int Valid::isValid(std::string &from, int **board, int turn) // Finished
 {
-   cout << from;
    from = validPos(from);
-   cout << from;
    // if ((from = validPos(from)) == "-1")
    if (from == "-1")
       return 0;
@@ -61,19 +65,21 @@ int Valid::isValid(std::string &from, int **board, int turn) // Finished
    }
    return piece;
 }
-bool Valid::isValid(std::string &to, std::string from, int **board, int turn) // Finished
+bool Valid::isValid(std::string &to, std::string from, int **board, int turn, int turns) // Finished
 {
    if (((to = validPos(to)) == "-1") || (from == to))
       return 0;
-   return canMove(to, from, board, turn);
+   return canMove(to, from, board, turn, turns);
 }
-bool Valid::canMove(std::string to, std::string from, int **board, int turn)
+bool Valid::canMove(std::string to, std::string from, int **board, int turn, int turns)
 {
    int piece = board[from[0] - 65][from[1] - 48];
    switch (abs(piece))
    {
    case 1:
-      return pawn(from, to, board, turn);
+      if (turns == 1)
+         return pawn(from, to, board, turn);
+      return pawn(from, to, turn, board);
    case 2:
       return rook(from, to, board, turn);
    case 3:
