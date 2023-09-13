@@ -1,9 +1,9 @@
 #include <unistd.h>
 #include <map>
 #include <iostream>
-#include "Driver.cpp"
-#include "Player1.cpp"
-#include "Player2.cpp"
+#include "./Game Files/Driver.cpp"
+#include "./Game Files/Player1.cpp"
+#include "./Game Files/Player2.cpp"
 
 class Chess
 {
