@@ -10,6 +10,7 @@ class Chess
     int **board;
     std::map<int, int> pieces;
     std::map<int, int> countPieces();
+    void print(int);
 
 public:
     Chess();
@@ -25,9 +26,7 @@ Chess::Chess()
     {
         board[i] = new int[8];
         for (int j = 0; j < 8; j++)
-        {
             board[i][j] = 0;
-        }
     }
 
     for (int i = 0; i < 8; i++)
@@ -48,44 +47,60 @@ Chess::Chess()
 
     pieces = countPieces();
 }
+void Chess::print(int piece)
+{
+    if (piece == 0)
+    {
+        cout << "  ";
+    }
+    else if (abs(piece) < 5)
+    {
+        cout << ((piece < 0) ? "B" : "W");
+        switch (abs(piece))
+        {
+        case 1:
+            cout << "P";
+            break;
+        case 2:
+            cout << "R";
+            break;
+        case 3:
+            cout << "K";
+            break;
+        case 4:
+            cout << "B";
+            break;
+        }
+    }
+    else
+    {
+        switch (abs(piece))
+        {
+        case 5:
+            cout << "Q";
+            break;
+        case 6:
+            cout << "K";
+            break;
+        }
+        cout << ((piece < 0) ? "B" : "W");
+    }
+}
 void Chess::display()
 {
-    std::cout << std::endl;
-    std::cout << "      1    2    3    4    5    6    7    8" << std::endl;
-    std::cout << "    -----------------------------------------" << std::endl;
+    cout << std::endl;
+    cout << "      1    2    3    4    5    6    7    8" << std::endl;
+    cout << "    -----------------------------------------" << std::endl;
     for (int i = 0; i < 8; i++)
     {
-        std::cout << " " << (char)(i + 65) << " ";
+        cout << " " << (char)(i + 65) << " ";
         for (int j = 0; j < 8; j++)
         {
             int piece = board[i][j];
-            std::cout << " | ";
-            switch (abs(piece))
-            {
-            case 0:
-                std::cout << "  ";
-                break;
-            case 1:
-                std::cout << ((piece < 0) ? "B" : "W") << "P";
-                break;
-            case 2:
-                std::cout << ((piece < 0) ? "B" : "W") << "R";
-                break;
-            case 3:
-                std::cout << ((piece < 0) ? "B" : "W") << "K";
-                break;
-            case 4:
-                std::cout << ((piece < 0) ? "B" : "W") << "B";
-                break;
-            case 5:
-                std::cout << "Q" << ((piece < 0) ? "B" : "W");
-                break;
-            case 6:
-                std::cout << "K" << ((piece < 0) ? "B" : "W");
-                break;
-            }
+            cout << " | ";
+            print(piece);
         }
-        std::cout << " | \n    -----------------------------------------\n";
+        cout << " | \n    -----------------------------------------\n";
     }
 }
 bool Chess::gameOver(Player1 p1, Player2 p2)
@@ -113,47 +128,47 @@ int **Chess::getBoard()
 int main()
 {
     Chess game;
-    std::cout << "-----------------------------------------------------";
-    std::cout << "\nWelcome to Chess!!\n";
-    std::cout << "Player 1's name: ";
+    cout << "-----------------------------------------------------";
+    cout << "\nWelcome to Chess!!\n";
+    cout << "Player 1's name: ";
     std::string playerName1;
-    std::cin >> playerName1;
-    std::cout << "Player 2's name: ";
+    cin >> playerName1;
+    cout << "Player 2's name: ";
     std::string playerName2;
-    std::cin >> playerName2;
+    cin >> playerName2;
     usleep(500000);
-    std::cout << std::endl
-              << playerName1 << " takes WHITE and " << playerName2 << " takes BLACK.\n";
+    cout << std::endl
+         << playerName1 << " takes WHITE and " << playerName2 << " takes BLACK.\n";
     usleep(500000);
     game.display();
 
     Player1 pl1(game.getBoard());
     Player2 pl2(game.getBoard());
     int moves = 0;
-    std::cout << "\nEnter valid cell positions (e.g, A2, B7).\n ";
+    cout << "\nEnter valid cell positions (e.g, A2, B7).\n ";
     do
     {
         if (moves != 0)
             game.display();
-        std::cout << "\n"
-                  << playerName1 << "'s Turn,\n";
+        cout << "\n"
+             << playerName1 << "'s Turn,\n";
         game.setBoard(pl1.turn(game.getBoard()));
         moves++;
         if (game.gameOver(pl1, pl2) || moves == 75)
             break;
         game.display();
-        std::cout << "\nFor " << playerName2 << ",\n";
+        cout << "\nFor " << playerName2 << ",\n";
         game.setBoard(pl2.turn(game.getBoard()));
         moves++;
     } while (!game.gameOver(pl1, pl2));
     if (moves == 75)
-        std::cout << "Match Draw! GG, everyone..!";
+        cout << "Match Draw! GG, everyone..!";
     else if (pl1.hasWon())
-        std::cout << playerName1 << " has won! Congratulations..!!";
+        cout << playerName1 << " has won! Congratulations..!!";
     else
-        std::cout << playerName2 << " has won! Congratulations..!!";
-    std::cout << "\n\nFinal Board:\n";
+        cout << playerName2 << " has won! Congratulations..!!";
+    cout << "\n\nFinal Board:\n";
     game.display();
-    std::cout << "-----------------------------------------------------";
+    cout << "-----------------------------------------------------";
     return 0;
 }

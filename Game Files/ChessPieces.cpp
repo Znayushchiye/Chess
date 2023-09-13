@@ -2,6 +2,8 @@
 #include <unordered_map>
 #include <vector>
 #define map unordered_map
+#define cout std::cout
+#define cin std::cin
 class ChessPieces
 {
 protected:
@@ -57,7 +59,7 @@ bool ChessPieces::rook(std::string from, std::string to, int **board, int turn)
    {
       for (int i = from[0] - 64; i < to[0] - 65; i++)
       {
-         std::cout << "piece = \'" << board[i][to[1] - 48] << "\'" << std::endl;
+         cout << "piece = \'" << board[i][to[1] - 48] << "\'" << std::endl;
          if (board[i][to[1] - 48] != 0)
             return false;
       }
@@ -66,8 +68,8 @@ bool ChessPieces::rook(std::string from, std::string to, int **board, int turn)
    {
       for (int i = from[0] - 66; i > to[0] - 65; i--)
       {
-         std::cout << "Printed = \'" << i << ", " << to[1] << "\'" << std::endl;
-         std::cout << "piece = \'" << board[i][to[1] - 48] << "\'" << std::endl;
+         cout << "Printed = \'" << i << ", " << to[1] << "\'" << std::endl;
+         cout << "piece = \'" << board[i][to[1] - 48] << "\'" << std::endl;
          if (board[i][to[1] - 48] != 0)
             return false;
       }
@@ -76,7 +78,7 @@ bool ChessPieces::rook(std::string from, std::string to, int **board, int turn)
    {
       for (int i = from[1] - 49; i > to[1] - 48; i--)
       {
-         std::cout << "piece = \'" << board[to[0] - 65][i] << "\'" << std::endl;
+         cout << "piece = \'" << board[to[0] - 65][i] << "\'" << std::endl;
          if (board[to[0] - 65][i] != 0)
             return false;
       }
@@ -85,13 +87,13 @@ bool ChessPieces::rook(std::string from, std::string to, int **board, int turn)
    {
       for (int i = from[1] - 47; i < to[1] - 48; i++)
       {
-         std::cout << "piece = \'" << board[to[0] - 65][i] << "\'" << std::endl;
+         cout << "piece = \'" << board[to[0] - 65][i] << "\'" << std::endl;
          if (board[to[0] - 65][i] != 0)
             return false;
       }
    }
 
-   std::cout << "2nd check passed\n";
+   cout << "2nd check passed\n";
    int piece = board[to[0] - 65][to[1] - 48];
    switch (turn)
    {
@@ -104,7 +106,7 @@ bool ChessPieces::rook(std::string from, std::string to, int **board, int turn)
          return false;
       break;
    }
-   std::cout << "Valid move\n";
+   cout << "Valid move\n";
    return true;
 }
 

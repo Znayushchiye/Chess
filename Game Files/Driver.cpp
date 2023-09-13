@@ -8,45 +8,45 @@ protected:
 
 int **Driver::driver(int turn, int **currentBoard)
 {
-   std::cout << "   From: ";
+   cout << "   From: ";
    std::string from;
-   std::cin >> from;
+   cin >> from;
    int piece;
    while (!(piece = isValid(from, currentBoard, turn)))
    {
-      std::cout << "   Invalid input! Enter a valid cell position: ";
-      std::cin >> from;
+      cout << "   Invalid input! Enter a valid cell position: ";
+      cin >> from;
    }
-   std::cout << "   Chosen piece:";
+   cout << "   Chosen piece:";
    switch (abs(piece))
    {
    case 6:
-      std::cout << " King";
+      cout << " King";
       goto print;
    case 5:
-      std::cout << " Queen";
+      cout << " Queen";
       goto print;
    case 4:
-      std::cout << " Bishop";
+      cout << " Bishop";
       goto print;
    case 3:
-      std::cout << " Knight";
+      cout << " Knight";
       goto print;
    case 2:
-      std::cout << " Rook";
+      cout << " Rook";
       goto print;
    case 1:
-      std::cout << " Pawn";
+      cout << " Pawn";
       goto print;
    }
 print:
-   std::cout << "\n   To: ";
+   cout << "\n   To: ";
    std::string to;
-   std::cin >> to;
+   cin >> to;
    while (!isValid(to, from, currentBoard, turn))
    {
-      std::cout << "   Invalid input! Check if your piece can move to the specified location: ";
-      std::cin >> to;
+      cout << "   Invalid input! Check if your piece can move to the specified location: ";
+      cin >> to;
    }
    return move(from, to, currentBoard);
 }
