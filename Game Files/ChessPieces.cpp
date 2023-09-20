@@ -1,3 +1,4 @@
+#include <iostream>
 #define cout std::cout
 #define cin std::cin
 #define string std::string
@@ -13,7 +14,7 @@ protected:
    bool queen(string, string, int **, int);
 };
 
-bool ChessPieces::pawn(string from, std::string to, int **board, int turn) // Double Step
+bool ChessPieces::pawn(string from, string to, int **board, int turn) // Double Step
 {
    int piece = board[to[0] - 'A'][to[1] - '1'];
    switch (turn)
