@@ -1,6 +1,4 @@
 #include <unistd.h>
-#include <map>
-#include <iostream>
 #include "./Game Files/Driver.cpp"
 #include "./Game Files/Player1.cpp"
 #include "./Game Files/Player2.cpp"
@@ -131,10 +129,10 @@ int main()
     cout << "-----------------------------------------------------";
     cout << "\nWelcome to Chess!!\n";
     cout << "Player 1's name: ";
-    std::string playerName1;
+    string playerName1;
     cin >> playerName1;
     cout << "Player 2's name: ";
-    std::string playerName2;
+    string playerName2;
     cin >> playerName2;
     usleep(500000);
     cout << std::endl

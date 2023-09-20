@@ -1,21 +1,23 @@
+#include <unordered_map>
 #include "ChessPieces.cpp"
+#define map unordered_map
 class Valid : public ChessPieces
 {
 protected:
-   std::string validPos(std::string);
-   int isValid(std::string &, int **, int);
-   bool isValid(std::string &, std::string, int **, int, int);
-   bool canMove(std::string, std::string, int **, int, int);
+   string validPos(string);
+   int isValid(string &, int **, int);
+   bool isValid(string &, string, int **, int, int);
+   bool canMove(string, string, int **, int, int);
    std::map<int, int> countpieces(int **);
 };
-std::string Valid::validPos(std::string str)
+string Valid::validPos(string str)
 {
    // Make all characters uppercase
    for (int i = str.length() - 1; i > -1; i--)
    {
       str[i] = std::toupper(str[i]);
    }
-   std::string temp = "";
+   string temp = "";
    char ch;
    for (int i = str.length() - 1; i > -1; i--)
    {
@@ -43,7 +45,7 @@ std::string Valid::validPos(std::string str)
       str[1] = str[1] - 1;
    return str;
 }
-int Valid::isValid(std::string &from, int **board, int turn) // Finished
+int Valid::isValid(string &from, int **board, int turn) // Finished
 {
    from = validPos(from);
    // if ((from = validPos(from)) == "-1")
@@ -65,13 +67,13 @@ int Valid::isValid(std::string &from, int **board, int turn) // Finished
    }
    return piece;
 }
-bool Valid::isValid(std::string &to, std::string from, int **board, int turn, int turns) // Finished
+bool Valid::isValid(string &to, string from, int **board, int turn, int turns) // Finished
 {
    if (((to = validPos(to)) == "-1") || (from == to))
       return 0;
    return canMove(to, from, board, turn, turns);
 }
-bool Valid::canMove(std::string to, std::string from, int **board, int turn, int turns)
+bool Valid::canMove(string to, string from, int **board, int turn, int turns)
 {
    int piece = board[from[0] - 65][from[1] - 48];
    switch (abs(piece))

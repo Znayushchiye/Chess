@@ -1,28 +1,25 @@
-#include <iostream>
-#include <unordered_map>
-#include <vector>
-#define map unordered_map
 #define cout std::cout
 #define cin std::cin
+#define string std::string
 class ChessPieces
 {
 protected:
-   bool pawn(std::string, std::string, int **, int);
-   bool pawn(std::string, std::string, int, int **);
-   bool rook(std::string, std::string, int **, int);
-   bool bishop(std::string, std::string, int **, int);
-   bool knight(std::string, std::string, int **, int);
-   bool king(std::string, std::string, int **, int);
-   bool queen(std::string, std::string, int **, int);
+   bool pawn(string, string, int **, int);
+   bool pawn(string, string, int, int **);
+   bool rook(string, string, int **, int);
+   bool bishop(string, string, int **, int);
+   bool knight(string, string, int **, int);
+   bool king(string, string, int **, int);
+   bool queen(string, string, int **, int);
 };
 
-bool ChessPieces::pawn(std::string from, std::string to, int **board, int turn)
+bool ChessPieces::pawn(string from, std::string to, int **board, int turn) // Double Step
 {
    int piece = board[to[0] - 'A'][to[1] - '1'];
    switch (turn)
    {
    case 1:
-      if (((to[0] != from[0] - 1) || (to[1] != from[1])) && ((to[0] != from[0] - 2) || (to[1] != from[1])) && ((to[0] != from[0] - 1) || (abs(to[1] - from[1]) != 1)))
+      if (((to[0] != from[0] - 1) || (to[1] != from[1])) && ((2 != from[0] - to[0]) || (to[1] != from[1])) && ((to[0] != from[0] - 1) || (abs(to[1] - from[1]) != 1)))
          return false;
       if ((to[0] == from[0] - 1) && (abs(to[1] - from[1]) == 1) && (piece >= 0))
          return false;
@@ -30,7 +27,7 @@ bool ChessPieces::pawn(std::string from, std::string to, int **board, int turn)
          return false;
       break;
    case 2:
-      if (((to[0] != from[0] + 1) || (to[1] != from[1])) && ((to[0] != from[0] + 2) || (to[1] != from[1])) && ((to[0] != from[0] + 1) || (abs(to[1] - from[1]) != 1)))
+      if (((to[0] != from[0] + 1) || (to[1] != from[1])) && ((to[0] - from[0] != 2) || (to[1] != from[1])) && ((to[0] != from[0] + 1) || (abs(to[1] - from[1]) != 1)))
          return false;
       if ((to[0] == from[0] + 1) && (abs(to[1] - from[1]) == 1) && (piece <= 0))
          return false;
@@ -42,7 +39,7 @@ bool ChessPieces::pawn(std::string from, std::string to, int **board, int turn)
       return false;
    return true;
 }
-bool ChessPieces::pawn(std::string from, std::string to, int turn, int **board) // CHECK LOGIC
+bool ChessPieces::pawn(string from, string to, int turn, int **board) // Single Step
 {
    int piece = board[to[0] - 'A'][to[1] - '1'];
    switch (turn)
@@ -68,7 +65,7 @@ bool ChessPieces::pawn(std::string from, std::string to, int turn, int **board) 
       return false;
    return true;
 }
-bool ChessPieces::rook(std::string from, std::string to, int **board, int turn)
+bool ChessPieces::rook(string from, string to, int **board, int turn)
 {
    if (from[0] != to[0] && from[1] != to[1])
       return false;
@@ -136,7 +133,7 @@ bool ChessPieces::rook(std::string from, std::string to, int **board, int turn)
    return true;
 }
 
-bool ChessPieces::bishop(std::string from, std::string to, int **board, int turn)
+bool ChessPieces::bishop(string from, string to, int **board, int turn)
 {
    if (abs(from[0] - to[0]) != abs(from[1] - to[1]))
       return false;
@@ -189,7 +186,7 @@ bool ChessPieces::bishop(std::string from, std::string to, int **board, int turn
    return true;
 }
 
-bool ChessPieces::knight(std::string from, std::string to, int **board, int turn)
+bool ChessPieces::knight(string from, string to, int **board, int turn)
 {
    if ((abs(from[0] - to[0]) != 2 || abs(from[1] - to[1]) != 1) && (abs(from[1] - to[1]) != 2 || abs(from[0] - to[0]) != 1))
       return false;
@@ -208,7 +205,7 @@ bool ChessPieces::knight(std::string from, std::string to, int **board, int turn
    return true;
 }
 
-bool ChessPieces::king(std::string from, std::string to, int **board, int turn)
+bool ChessPieces::king(string from, string to, int **board, int turn)
 {
    if ((abs(from[0] - to[0]) > 1) || (abs(from[1] - to[1]) > 1))
       return false;
@@ -227,7 +224,7 @@ bool ChessPieces::king(std::string from, std::string to, int **board, int turn)
    return true;
 }
 
-bool ChessPieces::queen(std::string from, std::string to, int **board, int turn)
+bool ChessPieces::queen(string from, string to, int **board, int turn)
 {
    return (rook(from, to, board, turn) || bishop(from, to, board, turn));
 }

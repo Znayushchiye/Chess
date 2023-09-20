@@ -1,16 +1,22 @@
+#include <iostream>
 #include "Valid.cpp"
 class Driver : public Valid
 {
 protected:
    int **driver(int, int **, int);
-   int **move(std::string, std::string, int **);
+   int **move(string, string, int **);
 };
 
 int **Driver::driver(int turn, int **currentBoard, int turns)
 {
+inputFrom:
    cout << "   From: ";
-   std::string from;
+   string from;
    cin >> from;
+   if (from == "end")
+   {
+      return currentBoard;
+   }
    int piece;
    while (!(piece = isValid(from, currentBoard, turn)))
    {
@@ -41,16 +47,32 @@ int **Driver::driver(int turn, int **currentBoard, int turns)
    }
 print:
    cout << "\n   To: ";
-   std::string to;
+   string to;
    cin >> to;
+   if (to == "end")
+   {
+      return currentBoard;
+   }
+   if (to == "back")
+   {
+      goto inputFrom;
+   }
    while (!isValid(to, from, currentBoard, turn, turns))
    {
       cout << "   Invalid input! Check if your piece can move to the specified location: ";
       cin >> to;
+      if (to == "end")
+      {
+         return currentBoard;
+      }
+      if (to == "back")
+      {
+         goto inputFrom;
+      }
    }
    return move(from, to, currentBoard);
 }
-int **Driver::move(std::string from, std::string to, int **board)
+int **Driver::move(string from, string to, int **board)
 {
    board[to[0] - 65][to[1] - 48] = board[from[0] - 65][from[1] - 48];
    board[from[0] - 65][from[1] - 48] = 0;
